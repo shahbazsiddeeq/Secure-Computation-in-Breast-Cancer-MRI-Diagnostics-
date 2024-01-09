@@ -1,18 +1,24 @@
 from __future__ import print_function
 import tensorflow as tf
+import os
+import numpy as np
+import pandas as pd
+from keras.utils import load_img, img_to_array
+from keras.applications.imagenet_utils import preprocess_input
+import array
+from PIL import Image, ImageFile
+from tensorflow_privacy.privacy.optimizers.dp_optimizer_keras import DPKerasAdamOptimizer
 
-from tensorflow.keras.datasets import mnist
-batch_size = 32
+
+
 num_classes = 6
-epochs = 40
 
 # input image dimensions
 img_rows, img_cols = 64, 64
-import os
-import numpy as np
+
 PATH = 'D:/School/shahbaz/ppml/Archive'
 data_dir_list = os.listdir(PATH)
-import pandas as pd
+
 target_data = pd.read_csv(PATH + '/INbreast_r.csv')
 num_classes = 6
 dataset = ''
@@ -21,13 +27,11 @@ test_dataset = '/testing'
 img_list=os.listdir(PATH+'/'+dataset)
 train_img_list=os.listdir(PATH+'/'+train_dataset)
 test_img_list=os.listdir(PATH+'/'+test_dataset)
-from keras.utils import load_img, img_to_array
-from keras.applications.imagenet_utils import preprocess_input
-import array
+
 img_data_list=[]
 train_img_data_list=[]
 test_img_data_list=[]
-from PIL import Image, ImageFile
+
 
 for img in train_img_list:
     if img == '.DS_Store':
@@ -100,7 +104,7 @@ print(x_test.shape[0], 'test samples')
 batch_size = 16
 num_classes = 6
 epochs = 100
-from tensorflow_privacy.privacy.optimizers.dp_optimizer_keras import DPKerasAdamOptimizer
+
 model = tf.keras.Sequential([
           tf.keras.layers.Conv2D(16, 8,
                                  strides=2,
@@ -141,4 +145,3 @@ model.fit(x_train, y_train,
           verbose=1,
           validation_data=(x_test, y_test))
 model.save('model_DNN_avg_16_w1.h5')
-
